@@ -6,7 +6,21 @@ before_install: # things we want done initially
     - docker build -t test-image -f Dockerfile.dev .
 
 script:
-    - docker run -e CI=true test-image npm run test -- --coverage
+    - docker run -e CI=true test-image npm run test
 
 language: generic
+
+deploy:
+    provider: elasticbeanstalk
+    region: "us-west-2"
+    app: "docker-react"
+    env: "DockerReact-env"
+    bucket_name: "elasticbeanstalk-us-west-2-067635769092"
+    bucket_path: "docker-react"
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key:
+        secure: $AWS_SECRET_KEY
+
       
